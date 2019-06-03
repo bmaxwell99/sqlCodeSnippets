@@ -14,34 +14,16 @@ Create table [dbo].[tblCustomer](
 [CustState] [varchar](30) null,
 [CustZip] [varchar](30) null)
 
-GO
-
-Drop table CoffeeShop.dbo.tblOrder
-
-select *
-from CoffeeShop.dbo.tblCustomer
-
-
-
-create procedure uspeNewCust
-@Fname varchar(30),
-@Lname varchar(30)
-
-AS
-
-declare @Cfname varchar(30)
-declare @clname varchar(30)
-
-set @CFName = @fname
-
-begin tran G1
-insert into tblCustomer(CustFname, CustLname)
-Values(@CFName, @CLName)
-commit tran G1
 
 Go
 
-select customerID , CustomerFname, CustomerLname, DateOfBirth ,Email, CustomerAddress, CustomerCity, CustomerState, CustomerZip   into CoffeeShop.dbo.tblCustomer from CUSTOMER_BUILD.dbo.tblCUSTOMER
+select customerID , CustomerFname, CustomerLname, DateOfBirth ,Email, CustomerAddress, CustomerCity, CustomerState, CustomerZip   
+	into CoffeeShop.dbo.tblCustomer 
+	from CUSTOMER_BUILD.dbo.tblCUSTOMER
+
+go
+
+select CUSTOMER_BUILD.dbo.tblCUSTOMER
 
 GO
 CREATE TABLE [dbo].[tblOrder](
@@ -83,12 +65,10 @@ CREATE TABLE [dbo].[tblOrderLineItem](
 
 	go
 
-alter table  tblorderlineitem
 
+--> this is how you "manually" add row to a table
 insert into dbo.tblOrderType
-values('For here' , 'in a mug/plate')
+values('For here' , 'in a mug/plate'), ('To Go', 'In a bag/to go Cup')
 
-insert into dbo.tblOrderType
-values('To Go', 'In a bag/to go Cup')
-
-drop table disc
+alter table tblorderlineitem
+	add fakecol int FOREIGN KEY REFERENCES tblVendor (VendorID) NOT NULL

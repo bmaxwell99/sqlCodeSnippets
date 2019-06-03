@@ -63,4 +63,37 @@ alter table tblOrder
 add constraint ck_noFutureOrders
 check (dbo.fn_noFutureOrders() = 0)
 
-create function fn_orderTotal
+go
+
+create function fn_orderTotalComp(@PK Int)
+returns numeric
+as
+begin
+
+declare @ret numeric = (select LineTotal * Quantity as OrderTotal
+				from tblOrderLineItem
+				where OrderLineItemID = @PK)
+return @ret
+end
+go
+
+create function fn_noNegatives()
+returns int
+as
+begin
+	declare @ret int = 0
+	if exists(Select *
+				from tblOrderLineItem
+				where Quantity < 0)
+
+	begin
+	set @ret = 1
+	end
+
+return @ret
+end
+Go
+alter table tblorderlineitem
+add constraint ck_nonegs
+check (dbo.fn_noNegatives() = 0)
+
